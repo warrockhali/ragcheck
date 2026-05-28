@@ -34,6 +34,9 @@ Implement only the approved milestone.
 - Keep commits small and grouped by reviewable intent.
 - Stage only files that belong to the current milestone.
 - Open PRs as draft by default unless the user asks for ready review.
+- Use Conventional Commits for commit messages.
+- Format commit messages as type(scope): summary.
+- Use common types: feat, fix, docs, test, chore, refactor, ci, build.
 - Keep route handlers thin and put business logic in services.
 - Keep scoring logic in evaluators.
 - Keep external RAG API calls in clients.

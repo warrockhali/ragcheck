@@ -98,7 +98,10 @@ $agentInstructionChecks = @(
     "Stage only files that belong to the current milestone.",
     "Run the relevant verification command before each commit when practical.",
     "PRs should be draft by default unless the user asks for ready review.",
-    "PR titles, PR descriptions, issues, and review comments must be written in Korean."
+    "PR titles, PR descriptions, issues, and review comments must be written in Korean.",
+    "Use Conventional Commits for commit messages.",
+    "Format commit messages as type(scope): summary.",
+    "Use common types: feat, fix, docs, test, chore, refactor, ci, build."
 )
 
 foreach ($expected in $agentInstructionChecks) {
@@ -116,7 +119,8 @@ $harnessChecks = @(
     "failure_type",
     "Create a task branch before implementation.",
     "Keep commits small and grouped by reviewable intent.",
-    "Open PRs as draft by default."
+    "Open PRs as draft by default.",
+    "Use Conventional Commits for commit messages."
 )
 
 foreach ($expected in $harnessChecks) {
@@ -132,6 +136,7 @@ Assert-Contains "skills\ragcheck-planner\SKILL.md" "Define what to build, not ho
 Assert-Contains "skills\ragcheck-developer\SKILL.md" "Implement only the approved milestone."
 Assert-Contains "skills\ragcheck-developer\SKILL.md" "Create or use a codex/ task branch before implementation."
 Assert-Contains "skills\ragcheck-developer\SKILL.md" "Keep commits small and grouped by reviewable intent."
+Assert-Contains "skills\ragcheck-developer\SKILL.md" "Use Conventional Commits for commit messages."
 Assert-Contains "skills\ragcheck-evaluator\SKILL.md" "Use the product like an external tester."
 Assert-Contains "skills\korean-communication\SKILL.md" "All RAGCheck agents must use Korean for user-facing communication."
 

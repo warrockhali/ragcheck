@@ -100,6 +100,8 @@ Keep commits small and grouped by reviewable intent.
 
 Open PRs as draft by default.
 
+Use Conventional Commits for commit messages.
+
 Rules:
 
 - Do not work directly on main unless the user explicitly asks.
@@ -108,3 +110,5 @@ Rules:
 - Stage only files that belong to the current milestone.
 - Run the relevant verification command before each commit when practical.
 - Write PR titles, PR descriptions, issues, and review comments in Korean.
+- Format commit messages as type(scope): summary.
+- Use common types: feat, fix, docs, test, chore, refactor, ci, build.
