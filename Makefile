@@ -7,9 +7,10 @@ verify-repository-structure:
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-repository-structure.ps1
 
 verify-backend: verify-agent-harness verify-repository-structure
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-backend.ps1
 
 verify-frontend: verify-agent-harness verify-repository-structure
 
 verify-db: verify-agent-harness verify-repository-structure
 
-verify-all: verify-agent-harness verify-repository-structure
+verify-all: verify-agent-harness verify-repository-structure verify-backend
