@@ -4,6 +4,7 @@ Backend code will evaluate external RAG APIs. It must not implement chatbot beha
 
 Responsibilities:
 
+- `backend/app.py`: application metadata and composition entry point.
 - `api/`: api routes for HTTP handling.
 - `services/`: services for business logic and orchestration.
 - `evaluators/`: evaluators for scoring retrieval_score, groundedness_score, answer_score, and failure_type.
@@ -13,3 +14,5 @@ Responsibilities:
 - `tests/`: backend tests and fixtures.
 
 Evaluation behavior must preserve raw request and raw response where possible.
+
+No web framework is introduced in this milestone.
