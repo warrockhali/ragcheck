@@ -378,6 +378,36 @@ Do not put evaluation logic directly inside route handlers.
 
 
 
+\## Technology Stack Rules
+
+
+
+The approved RAGCheck stack is:
+
+
+
+\- Backend: Python 3.12+, FastAPI, Pydantic, SQLAlchemy 2.x, Alembic, pytest, uv, ruff
+
+\- Frontend: Node.js tooling, Vite, React, TypeScript, Vitest
+
+\- Database: PostgreSQL
+
+\- Verification: Makefile + scripts/verify-\*.ps1
+
+
+
+Do not change the technology stack without explicit user approval.
+
+
+
+SQLite is not the official MVP database. Any remaining SQLite migration or verification is a transitional artifact from before the PostgreSQL transition and must be described that way.
+
+
+
+RAGCheck remains an external RAG API evaluation harness, not a chatbot, document upload app, or generic RAG application builder.
+
+
+
 \## Development Order
 
 
