@@ -47,6 +47,51 @@ function Assert-NoTrailingWhitespace {
     }
 }
 
+function Get-UsablePython {
+    $bundledPython = Join-Path $env:USERPROFILE ".cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+    $candidates = @("py", "python", "python3", $bundledPython)
+    foreach ($candidate in $candidates) {
+        $command = Get-Command $candidate -ErrorAction SilentlyContinue
+        if (-not $command) {
+            continue
+        }
+        if ($command.Source -like "*\WindowsApps\python*") {
+            continue
+        }
+
+        $versionOutput = & $command.Source --version
+        if ($LASTEXITCODE -eq 0 -and $versionOutput -match "Python \d+\.\d+") {
+            return $command.Source
+        }
+    }
+
+    return $null
+}
+
+function Get-TestPython {
+    param([string]$Python)
+
+    $venvPython = Join-Root ".venv\Scripts\python.exe"
+    if (-not (Test-Path -LiteralPath $venvPython -PathType Leaf)) {
+        & $Python -m venv (Join-Root ".venv") | Out-Host
+        if ($LASTEXITCODE -ne 0) {
+            throw "failed to create backend verification virtual environment"
+        }
+    }
+
+    & $venvPython -m pip install --upgrade pip | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "failed to upgrade pip for backend verification"
+    }
+
+    & $venvPython -m pip install -e ".[dev]" | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "failed to install backend verification dependencies"
+    }
+
+    return $venvPython
+}
+
 $requiredDirectories = @(
     "backend\api",
     "backend\services",
@@ -60,15 +105,23 @@ $requiredDirectories = @(
 $requiredFiles = @(
     "backend\__init__.py",
     "backend\app.py",
+    "backend\database.py",
     "backend\api\__init__.py",
     "backend\api\health.py",
+    "backend\api\projects.py",
     "backend\services\__init__.py",
     "backend\services\health.py",
+    "backend\services\projects.py",
     "backend\evaluators\__init__.py",
     "backend\clients\__init__.py",
     "backend\models\__init__.py",
+    "backend\models\base.py",
+    "backend\models\project.py",
     "backend\schemas\__init__.py",
+    "backend\schemas\project.py",
     "backend\tests\README.md",
+    "backend\tests\test_projects.py",
+    "pyproject.toml",
     "scripts\verify-backend.ps1"
 )
 
@@ -82,16 +135,51 @@ foreach ($file in $requiredFiles) {
 
 Assert-Contains "backend\__init__.py" "__version__"
 Assert-Contains "backend\app.py" "create_app_metadata"
+Assert-Contains "backend\app.py" "create_app"
+Assert-Contains "backend\app.py" "FastAPI"
 Assert-Contains "backend\app.py" "RAGCheck"
 Assert-Contains "backend\api\health.py" "get_health_status"
+Assert-Contains "backend\api\projects.py" "APIRouter"
+Assert-Contains "backend\api\projects.py" "/projects"
+Assert-Contains "backend\api\projects.py" "Project not found"
 Assert-Contains "backend\services\health.py" "build_health_status"
+Assert-Contains "backend\services\projects.py" "create_project"
+Assert-Contains "backend\services\projects.py" "list_projects"
+Assert-Contains "backend\services\projects.py" "get_project"
+Assert-Contains "backend\services\projects.py" "update_project"
+Assert-Contains "backend\services\projects.py" "delete_project"
+Assert-Contains "backend\models\project.py" "__tablename__ = `"projects`""
+Assert-Contains "backend\schemas\project.py" "ProjectCreate"
+Assert-Contains "backend\schemas\project.py" "ProjectUpdate"
+Assert-Contains "backend\schemas\project.py" "ProjectRead"
+Assert-Contains "backend\tests\test_projects.py" "test_create_project"
+Assert-Contains "backend\tests\test_projects.py" "test_unknown_project_returns_404"
+Assert-Contains "backend\tests\test_projects.py" "test_update_unknown_project_returns_404"
+Assert-Contains "backend\tests\test_projects.py" "test_delete_unknown_project_returns_404"
+Assert-Contains "pyproject.toml" "fastapi"
+Assert-Contains "pyproject.toml" "sqlalchemy"
+Assert-Contains "pyproject.toml" "psycopg"
+Assert-Contains "pyproject.toml" "pytest"
 Assert-Contains "backend\README.md" "backend/app.py"
-Assert-Contains "backend\README.md" "No web framework is introduced in this milestone."
+Assert-Contains "backend\README.md" "FastAPI"
 Assert-Contains "Makefile" "verify-backend"
 Assert-Contains "Makefile" "scripts/verify-backend.ps1"
 
 foreach ($file in $requiredFiles + @("backend\README.md", "Makefile")) {
     Assert-NoTrailingWhitespace $file
+}
+
+$python = Get-UsablePython
+if (-not $python) {
+    throw "A usable Python runtime is required to run backend Project CRUD tests"
+}
+
+$testPython = Get-TestPython $python
+
+& $testPython -m pytest backend\tests\test_projects.py
+
+if ($LASTEXITCODE -ne 0) {
+    throw "backend Project CRUD tests failed"
 }
 
 Write-Host "backend verification passed"

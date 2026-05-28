@@ -1,1 +1,1 @@
-"""Business logic boundary for the backend."""
+"""Service layer modules."""
