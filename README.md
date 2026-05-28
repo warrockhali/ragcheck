@@ -17,6 +17,9 @@ See `docs/repository-structure.md` for ownership boundaries.
 
 ## Verification
 
+Backend dependencies are declared in `pyproject.toml` and locked in `uv.lock`.
+When `uv` is installed, backend verification syncs `.venv` from the lockfile.
+
 Run all available checks:
 
 ```powershell
