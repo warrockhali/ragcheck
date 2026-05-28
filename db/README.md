@@ -2,6 +2,10 @@
 
 Database files define persistence for RAGCheck database entities.
 
+PostgreSQL is the official MVP database. Any remaining SQLite migration or
+verification in this directory is a transitional artifact from before the
+PostgreSQL transition.
+
 MVP entities:
 
 - Project
@@ -14,7 +18,8 @@ Use `migrations/` for schema migrations and `seeds/` for demo or development see
 
 ## Initial schema
 
-`migrations/001_initial_schema.sql` creates the MVP SQLite schema for:
+`migrations/001_initial_schema.sql` is the current transitional SQLite schema
+artifact for:
 
 - `projects`
 - `rag_endpoints`
@@ -34,5 +39,7 @@ when the external RAG API call makes them available. It also constrains
 - `FORMAT_ERROR`
 - `API_ERROR`
 
-Run `make verify-db` to apply the migration to a temporary SQLite database and
-check table, column, foreign key, and CHECK constraint contracts.
+Run `make verify-db` to apply the transitional migration to a temporary SQLite
+database and check table, column, foreign key, and CHECK constraint contracts.
+This is current transitional SQLite verification, not PostgreSQL runtime
+verification.

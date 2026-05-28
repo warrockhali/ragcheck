@@ -1,4 +1,4 @@
-.PHONY: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db verify-all
+.PHONY: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db verify-tech-stack verify-all
 
 verify-agent-harness:
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-agent-harness.ps1
@@ -15,4 +15,7 @@ verify-frontend: verify-agent-harness verify-repository-structure
 verify-db: verify-agent-harness verify-repository-structure
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-db.ps1
 
-verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db
+verify-tech-stack: verify-agent-harness verify-repository-structure
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-tech-stack.ps1
+
+verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db verify-tech-stack

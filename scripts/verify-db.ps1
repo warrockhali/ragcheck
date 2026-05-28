@@ -48,12 +48,12 @@ $checkedFiles = @(
 
 Assert-File $migration
 Assert-Contains "Makefile" "scripts/verify-db.ps1"
-Assert-Contains "Makefile" "verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db"
+Assert-Contains "Makefile" "verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db verify-tech-stack"
 Assert-Contains "db\README.md" "001_initial_schema.sql"
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
-    throw "Node.js is required for SQLite schema verification"
+    throw "Node.js is required for current transitional SQLite verification"
 }
 
 $verifyScript = @'
@@ -294,7 +294,7 @@ assertRejected(
   "evaluation_results foreign key did not reject an unknown evaluation_run_id",
 );
 
-console.log("SQLite schema contract verification passed");
+console.log("Current transitional SQLite schema contract verification passed");
 '@
 
 $tempScript = [System.IO.Path]::GetTempFileName() + ".mjs"
@@ -302,7 +302,7 @@ Set-Content -LiteralPath $tempScript -Value $verifyScript -Encoding UTF8
 try {
     & $node.Source $tempScript $Root
     if ($LASTEXITCODE -ne 0) {
-        throw "SQLite schema contract verification failed"
+        throw "Current transitional SQLite schema contract verification failed"
     }
 }
 finally {
@@ -313,4 +313,4 @@ foreach ($file in $checkedFiles) {
     Assert-NoTrailingWhitespace $file
 }
 
-Write-Host "db verification passed"
+Write-Host "current transitional SQLite verification passed"
