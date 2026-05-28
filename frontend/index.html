@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAGCheck Frontend Skeleton</title>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <header class="app-shell__header">
+    <div>
+      <p class="eyebrow">RAGCheck</p>
+      <h1>외부 RAG API 평가 테스트 하네스</h1>
+      <p class="lede">
+        RAGCheck는 사용자가 제공한 RAG API endpoint에 curated TestCase를 호출하고,
+        retrieved contexts와 generated answer를 확인하기 위한 MVP frontend skeleton입니다.
+      </p>
+    </div>
+    <div class="status-panel" aria-label="현재 마일스톤 상태">
+      <strong>Frontend skeleton</strong>
+      <span>실제 CRUD, API 호출, scoring은 아직 구현되지 않았습니다.</span>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <nav class="side-nav" aria-label="MVP navigation">
+      <a href="#dashboard" data-route="dashboard">Dashboard</a>
+      <a href="#projects" data-route="projects">Projects</a>
+      <a href="#endpoints" data-route="endpoints">RAG Endpoints</a>
+      <a href="#test-cases" data-route="test-cases">Test Cases</a>
+      <a href="#runs" data-route="runs">Evaluation Runs</a>
+      <a href="#results" data-route="results">Results</a>
+    </nav>
+
+    <main id="app" class="page-container" tabindex="-1"></main>
+  </div>
+
+  <template id="dashboard-template">
+    <section class="page-section" data-page="dashboard">
+      <div class="section-heading">
+        <p class="eyebrow">Start</p>
+        <h2>외부 RAG API를 평가하기 위한 작업 흐름</h2>
+        <p>
+          Project를 만들고 RagEndpoint, TestCase, EvaluationRun, EvaluationResult로 이어지는
+          평가 흐름을 붙일 수 있도록 화면 구조만 준비되어 있습니다.
+        </p>
+      </div>
+      <div class="workflow-grid">
+        <article class="workflow-item">
+          <span>1</span>
+          <h3>Project</h3>
+          <p>평가 대상 API와 테스트 묶음을 관리할 workspace 영역입니다.</p>
+        </article>
+        <article class="workflow-item">
+          <span>2</span>
+          <h3>RagEndpoint</h3>
+          <p>endpoint_url, method, headers_template, body_template, response_mapping을 설정할 예정입니다.</p>
+        </article>
+        <article class="workflow-item">
+          <span>3</span>
+          <h3>TestCase</h3>
+          <p>question, expected_answer, expected_context_hint, category, difficulty를 담을 예정입니다.</p>
+        </article>
+        <article class="workflow-item">
+          <span>4</span>
+          <h3>EvaluationRun</h3>
+          <p>선택한 TestCase batch를 외부 RAG API에 실행하는 영역입니다.</p>
+        </article>
+        <article class="workflow-item">
+          <span>5</span>
+          <h3>EvaluationResult</h3>
+          <p>점수와 failure_type, raw request/response를 확인하는 결과 영역입니다.</p>
+        </article>
+      </div>
+      <div class="notice not-implemented">
+        이 화면은 skeleton입니다. 실패, 누락, 미구현 상태를 숨기지 않기 위해 placeholder를 명시합니다.
+      </div>
+    </section>
+  </template>
+
+  <template id="projects-template">
+    <section class="page-section" data-page="projects">
+      <div class="section-heading">
+        <p class="eyebrow">Projects</p>
+        <h2>Project 관리</h2>
+        <p>외부 RAG API 평가 workspace를 관리할 화면입니다.</p>
+      </div>
+      <div class="empty-state not-implemented">
+        <h3>Project CRUD는 아직 구현되지 않았습니다</h3>
+        <p>이후 milestone에서 Project 목록, 생성, 수정, 삭제 기능을 연결합니다.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="endpoints-template">
+    <section class="page-section" data-page="endpoints">
+      <div class="section-heading">
+        <p class="eyebrow">RAG Endpoints</p>
+        <h2>RagEndpoint 설정</h2>
+        <p>사용자 제공 external RAG API endpoint 설정을 담을 화면입니다.</p>
+      </div>
+      <div class="schema-list">
+        <span>name</span>
+        <span>endpoint_url</span>
+        <span>method</span>
+        <span>headers_template</span>
+        <span>body_template</span>
+        <span>response_mapping</span>
+        <span>timeout_ms</span>
+      </div>
+      <div class="empty-state not-implemented">
+        <h3>RagEndpoint CRUD와 API 호출은 아직 구현되지 않았습니다</h3>
+        <p>이 화면은 endpoint contract를 보여주는 placeholder입니다.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="test-cases-template">
+    <section class="page-section" data-page="test-cases">
+      <div class="section-heading">
+        <p class="eyebrow">Test Cases</p>
+        <h2>TestCase 관리</h2>
+        <p>curated question과 expected answer/context hint를 관리할 화면입니다.</p>
+      </div>
+      <div class="schema-list">
+        <span>question</span>
+        <span>expected_answer</span>
+        <span>expected_context_hint</span>
+        <span>category</span>
+        <span>difficulty</span>
+      </div>
+      <div class="empty-state not-implemented">
+        <h3>TestCase CRUD는 아직 구현되지 않았습니다</h3>
+        <p>내부 문서 indexing이나 generation이 아니라 외부 API 평가용 테스트 항목을 다룹니다.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="runs-template">
+    <section class="page-section" data-page="runs">
+      <div class="section-heading">
+        <p class="eyebrow">Evaluation Runs</p>
+        <h2>EvaluationRun 실행</h2>
+        <p>하나의 RagEndpoint와 선택된 TestCase batch를 실행할 화면입니다.</p>
+      </div>
+      <div class="empty-state not-implemented">
+        <h3>EvaluationRun 생성과 실행은 아직 구현되지 않았습니다</h3>
+        <p>외부 RAG API 호출, response_mapping 실행, latency 측정은 이후 milestone 범위입니다.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="results-template">
+    <section class="page-section" data-page="results">
+      <div class="section-heading">
+        <p class="eyebrow">Results</p>
+        <h2>EvaluationResult dashboard</h2>
+        <p>결과 화면은 좋은 결과만 보여주지 않고 실패 유형과 원본 payload를 함께 드러내야 합니다.</p>
+      </div>
+      <div class="result-table" role="table" aria-label="EvaluationResult placeholder">
+        <div role="row" class="result-table__head">
+          <span role="columnheader">retrieval_score</span>
+          <span role="columnheader">groundedness_score</span>
+          <span role="columnheader">answer_score</span>
+          <span role="columnheader">failure_type</span>
+          <span role="columnheader">latency_ms</span>
+        </div>
+        <div role="row" class="result-table__row">
+          <span role="cell">pending</span>
+          <span role="cell">pending</span>
+          <span role="cell">pending</span>
+          <span role="cell">FORMAT_ERROR / API_ERROR 등 표시 예정</span>
+          <span role="cell">pending</span>
+        </div>
+      </div>
+      <div class="empty-state not-implemented">
+        <h3>scoring과 failure_type 분류는 아직 구현되지 않았습니다</h3>
+        <p>향후 request_payload, response_body, actual_answer, actual_contexts, status_code를 보존해 표시합니다.</p>
+      </div>
+    </section>
+  </template>
+
+  <script src="src/app.js"></script>
+</body>
+</html>
