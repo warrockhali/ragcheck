@@ -442,6 +442,14 @@ Recommended order:
 
 \- PR titles, PR descriptions, issues, and review comments must be written in Korean.
 
+\- Use Conventional Commits for commit messages.
+
+\- Format commit messages as type(scope): Korean summary.
+
+\- Use common types: feat, fix, docs, test, chore, refactor, ci, build.
+
+\- Write commit summaries in Korean so squash merge commit bodies and GitHub commit lists stay Korean.
+
 
 
 \## Verification Rules
