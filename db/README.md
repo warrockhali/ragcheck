@@ -16,7 +16,12 @@ MVP entities:
 
 Use `migrations/` for schema migrations and `seeds/` for demo or development seed data.
 
-## Initial schema
+## PostgreSQL Alembic migrations
+
+`alembic/versions/20260529_0001_create_projects.py` creates the official
+PostgreSQL `projects` table for the Project CRUD milestone.
+
+## Transitional SQLite schema
 
 `migrations/001_initial_schema.sql` is the current transitional SQLite schema
 artifact for:

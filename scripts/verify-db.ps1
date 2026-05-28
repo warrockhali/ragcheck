@@ -40,16 +40,31 @@ function Assert-NoTrailingWhitespace {
 }
 
 $migration = "db\migrations\001_initial_schema.sql"
+$projectMigration = "db\alembic\versions\20260529_0001_create_projects.py"
 $checkedFiles = @(
     $migration,
+    $projectMigration,
+    "db\alembic\README.md",
     "db\README.md",
     "Makefile"
 )
 
 Assert-File $migration
+Assert-File $projectMigration
 Assert-Contains "Makefile" "scripts/verify-db.ps1"
 Assert-Contains "Makefile" "verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db verify-tech-stack"
 Assert-Contains "db\README.md" "001_initial_schema.sql"
+Assert-Contains "db\README.md" "20260529_0001_create_projects.py"
+Assert-Contains "db\README.md" "PostgreSQL"
+Assert-Contains $projectMigration "op.create_table"
+Assert-Contains $projectMigration "`"projects`""
+Assert-Contains $projectMigration "`"id`""
+Assert-Contains $projectMigration "`"name`""
+Assert-Contains $projectMigration "`"description`""
+Assert-Contains $projectMigration "`"created_at`""
+Assert-Contains $projectMigration "`"updated_at`""
+
+Write-Host "PostgreSQL Alembic Project migration verification passed"
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
