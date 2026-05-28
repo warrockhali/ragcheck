@@ -13,5 +13,6 @@ verify-frontend: verify-agent-harness verify-repository-structure
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-frontend.ps1
 
 verify-db: verify-agent-harness verify-repository-structure
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-db.ps1
 
-verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend
+verify-all: verify-agent-harness verify-repository-structure verify-backend verify-frontend verify-db
