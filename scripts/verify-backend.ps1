@@ -47,6 +47,20 @@ function Assert-NoTrailingWhitespace {
     }
 }
 
+function Get-UsableUv {
+    $command = Get-Command uv -ErrorAction SilentlyContinue
+    if (-not $command) {
+        return $null
+    }
+
+    $versionOutput = & $command.Source --version
+    if ($LASTEXITCODE -eq 0 -and $versionOutput -match "^uv ") {
+        return $command.Source
+    }
+
+    return $null
+}
+
 function Get-UsablePython {
     $bundledPython = Join-Path $env:USERPROFILE ".cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
     $candidates = @("py", "python", "python3", $bundledPython)
@@ -71,7 +85,16 @@ function Get-UsablePython {
 function Get-TestPython {
     param([string]$Python)
 
+    $uv = Get-UsableUv
     $venvPython = Join-Root ".venv\Scripts\python.exe"
+    if ($uv) {
+        & $uv sync --extra dev --frozen | Out-Host
+        if ($LASTEXITCODE -ne 0) {
+            throw "failed to sync backend verification dependencies with uv"
+        }
+        return $venvPython
+    }
+
     if (-not (Test-Path -LiteralPath $venvPython -PathType Leaf)) {
         & $Python -m venv (Join-Root ".venv") | Out-Host
         if ($LASTEXITCODE -ne 0) {
@@ -122,6 +145,7 @@ $requiredFiles = @(
     "backend\tests\README.md",
     "backend\tests\test_projects.py",
     "pyproject.toml",
+    "uv.lock",
     "scripts\verify-backend.ps1"
 )
 
@@ -160,6 +184,8 @@ Assert-Contains "pyproject.toml" "fastapi"
 Assert-Contains "pyproject.toml" "sqlalchemy"
 Assert-Contains "pyproject.toml" "psycopg"
 Assert-Contains "pyproject.toml" "pytest"
+Assert-Contains "uv.lock" "version = 1"
+Assert-Contains "uv.lock" "name = `"ragcheck`""
 Assert-Contains "backend\README.md" "backend/app.py"
 Assert-Contains "backend\README.md" "FastAPI"
 Assert-Contains "Makefile" "verify-backend"

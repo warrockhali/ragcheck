@@ -55,6 +55,8 @@ $requiredFiles = @(
     "docs\tech-stack.md",
     "AGENTS.md",
     "db\README.md",
+    "pyproject.toml",
+    "uv.lock",
     "Makefile",
     "scripts\verify-tech-stack.ps1"
 )
@@ -92,6 +94,15 @@ Assert-Contains "db\README.md" "PostgreSQL is the official MVP database."
 Assert-Contains "db\README.md" "transitional artifact"
 Assert-Contains "db\README.md" "current transitional SQLite verification"
 Assert-NotContains "db\README.md" "MVP SQLite schema"
+
+Assert-Contains "pyproject.toml" "fastapi"
+Assert-Contains "pyproject.toml" "pydantic"
+Assert-Contains "pyproject.toml" "sqlalchemy"
+Assert-Contains "pyproject.toml" "alembic"
+Assert-Contains "pyproject.toml" "psycopg"
+Assert-Contains "pyproject.toml" "pytest"
+Assert-Contains "pyproject.toml" "ruff"
+Assert-Contains "uv.lock" "name = `"ragcheck`""
 
 Assert-Contains "Makefile" "verify-tech-stack"
 Assert-Contains "Makefile" "scripts/verify-tech-stack.ps1"
